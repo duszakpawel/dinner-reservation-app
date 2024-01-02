@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:MauiBuberBreakfast.ViewModels"
+             xmlns:models="clr-namespace:MauiBuberBreakfast.Models"
+             x:DataType="viewmodels:MyBreakfastsViewModel"
+             x:Class="MauiBuberBreakfast.MainPage">
+
+    <Grid Padding="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="AUTO" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="AUTO" />
+        </Grid.RowDefinitions>
+
+        <!-- Your Breakfasts -->
+        <HorizontalStackLayout>
+            <Label FontFamily="Roboto" FontSize="24" Text="Your " />
+            <Label FontFamily="Roboto" FontSize="24" Text="Breakfasts"
+                   TextColor="{StaticResource BuberBlue}"/>
+        </HorizontalStackLayout>
+
+        <!-- Breakfasts you have created -->
+        <Label Text="Breakfasts you have created"
+               Grid.Row="1"
+               TextColor="#555" />
+
+        <!-- Scrollable list of Breakfasts -->
+        <RefreshView Grid.Row="2"
+                     Margin="0,16"
+                     IsRefreshing="{Binding IsRefreshing}"
+                     Command="{Binding LoadBreakfastsCommand}">
+            <CollectionView ItemsSource="{Binding Breakfasts}">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical"
+                                   ItemSpacing="20" />
+                </CollectionView.ItemsLayout>
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Breakfast">
+                        <Border MinimumHeightRequest="315"
+                            Stroke="#efefef">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="2*" />
+                                </Grid.ColumnDefinitions>
+
+                                <Image Source="{Binding Image}"
+                                   Aspect="AspectFill" />
+
+                                <Grid Grid.Column="1" Padding="16">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="AUTO" />
+                                        <RowDefinition Height="AUTO" />
+                                        <RowDefinition Height="*" />
+                                        <RowDefinition Height="AUTO" />
+                                        <RowDefinition Height="AUTO" />
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Name -->
+                                    <Label Text="{Binding Name}"
+                                       FontSize="24"
+                                       FontFamily="RobotoBold" />
+
+                                    <!-- Start and End Date Time -->
+                                    <FlexLayout Wrap="Wrap"
+                                                Grid.Row="1"
+                                                AlignItems="Center">
+                                        <Label Text="{Binding StartDateTime, 
+                                            Converter={StaticResource DateTimeToBreakfastDayConverter}}"
+                                               FontSize="16"
+                                               Grid.Row="1" />
+                                        <Label Text=", " />
+                                        <Label Text="{Binding StartDateTime, 
+                                            Converter={StaticResource DateTimeToTimeConverter}}" />
+                                        <Label Text="{Binding EndDateTime, 
+                                            Converter={StaticResource DateTimeToTimeConverter}}" />
+                                    </FlexLayout>
+
+                                    <!-- Description -->
+                                    <Label Text="{Binding Description}"
+                                       Grid.Row="2"
+                                       Padding="0,8,0,0"
+                                       TextColor="#555" />
+
+                                    <!-- Savory -->
+                                    <FlexLayout
+                                    BindableLayout.ItemsSource="{Binding Savory}"
+                                    Grid.Row="3"
+                                    Wrap="Wrap"
+                                    AlignItems="Start">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame Padding="6"
+                                                   Margin="1"
+                                                   BorderColor="Transparent"
+                                                   BackgroundColor="#ecf7ff">
+                                                    <Label Text="{Binding .}" />
+                                                </Frame>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+
+                                    <!-- Sweet -->
+                                    <FlexLayout
+                                    BindableLayout.ItemsSource="{Binding Sweet}"
+                                    Grid.Row="4"
+                                    Wrap="Wrap"
+                                    AlignItems="Start">
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate>
+                                                <Frame Padding="6"
+                                                   Margin="1"
+                                                   BorderColor="Transparent"
+                                                   BackgroundColor="#f6ddff">
+                                                    <Label Text="{Binding .}" />
+                                                </Frame>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </FlexLayout>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Create New Button Breakfast Button -->
+        <Button Text="Create New Breakfast"
+                BackgroundColor="Black"
+                Padding="16"
+                CornerRadius="2"
+                Grid.Row="3" />
+    </Grid>
+
+</ContentPage>
